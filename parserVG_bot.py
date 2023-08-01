@@ -2,12 +2,11 @@ import json
 from aiogram import Bot, Dispatcher, executor, types
 # from config import token
 from aiogram.dispatcher.filters import Text
-from func_vg_no import check_update
+from func_vg_no import check_update, pars_func
 import asyncio
 
 
 
-user_id = 12121212
 token = ''
 bot = Bot(token=token)
 dp = Dispatcher(bot)
@@ -15,6 +14,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands='start')
 async def start(message: types.Message):
+    pars_func()
     start_buttns = ['All news', 'Fresh news']
     keyboar = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboar.add(*start_buttns)
@@ -46,10 +46,10 @@ async def every_30min_news():
         if len(fresh_news) >= 1:
             for k, v in sorted(fresh_news.items())[-3:]:
                 news =f'{v["time_news"]}\n{v["url"]}'
-                #get your id @userinfobot
-                await bot.send_message(user_id, news, disable_notification=True)
+                
+                await bot.send_message('News for you', news, disable_notification=True)
         else:
-            await bot.send_message(user_id, 'Haven`t new News yet')
+            await bot.send_message('Haven`t new News yet')
         
         await asyncio.sleep(30)
 
